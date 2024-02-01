@@ -1,5 +1,6 @@
 import sys
 import requests
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -14,10 +15,17 @@ class MainWindow(QMainWindow):
         super().__init__(*args, **kwargs)
         uic.loadUi('main_window.ui', self)
 
-        self.map_zoom = 10
+        self.map_zoom = 15
         self.map_ll = ["50.850331", "58.842917"]
         self.map_l = 'map'
 
+        self.refresh_map()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_PageUp:
+            self.map_zoom = min(20, self.map_zoom + 1)
+        if event.key() == Qt.Key_PageDown:
+            self.map_zoom = max(4, self.map_zoom - 1)
         self.refresh_map()
 
     def refresh_map(self):
