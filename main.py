@@ -17,16 +17,29 @@ class MainWindow(QMainWindow):
 
         self.map_zoom = 15
         self.map_ll = ["50.850331", "58.842917"]
-        self.map_l = 'map'
-
+        self.map_l = 'sat'
         self.refresh_map()
+        self.delta = 0.1
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
             self.map_zoom = min(20, self.map_zoom + 1)
         if event.key() == Qt.Key_PageDown:
             self.map_zoom = max(4, self.map_zoom - 1)
+        if event.key() == Qt.Key_Up and -180 < float(self.map_ll[1]) < 180:
+            self.map_ll[1] = str(float(self.map_ll[1]) + self.delta / self.map_zoom)
+        if event.key() == Qt.Key_Down and -180 < float(self.map_ll[1]) < 180:
+            self.map_ll[1] = str(float(self.map_ll[1]) - self.delta / self.map_zoom)
+        if event.key() == Qt.Key_Right and -180 < float(self.map_ll[0]) < 180:
+            self.map_ll[0] = str(float(self.map_ll[0]) + self.delta / self.map_zoom)
+        if event.key() == Qt.Key_Left and -180 < float(self.map_ll[0]) < 180:
+            self.map_ll[0] = str(float(self.map_ll[0]) - self.delta / self.map_zoom)
+        if event.key() == Qt.Key_M:
+            self.map_l = 'map'
+        if event.key() == Qt.Key_S:
+            self.map_l = 'sat'
         self.refresh_map()
+
 
     def refresh_map(self):
         params = {
